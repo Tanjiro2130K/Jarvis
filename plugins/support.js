@@ -18,10 +18,10 @@ System({
     desc: "jarvis-md support",
     type: "support"
 }, async (message) => {
-    const name = 'ɪʀᴏɴ ᴍᴀɴ 🎓', title = "ᴊᴀʀᴠɪꜱ ꜱᴜᴩᴩᴏʀᴛ 🪄", number = '4915252819677', body = "ɪʀᴏɴ ᴍᴀɴ";
-    const image = "https://graph.org/file/58ea74675af7836579a3a.jpg", sourceUrl = 'https://github.com/Loki-Xer/Jarvis';
+    const name = 'TIKU🥢🍥', title = "TIKU_BOTS", number = '917086726371', body = "TIKU🥢🍥";
+    const image = "https://fighter-programmer-uploaderf.hf.space/file/image-rck1688x56r.jpg", sourceUrl = 'https://github.com/rutgerfarry/markhub_notes/blob/master/Japanese%20Culture%20Notes.md';
     const logo = await getBuffer(image);
-    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG: powered by Jarvis-md;\nTEL;type=CELL;type=VOICE;waid=${number}:${number}\nEND:VCARD`;
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG: TIKU🥢🍥;\nTEL;type=CELL;type=VOICE;waid=${number}:${number}\nEND:VCARD`;
     const adon = { title, body, thumbnail: logo, mediaType: 1, mediaUrl: sourceUrl, sourceUrl, showAdAttribution: true, renderLargerThumbnail: false };
     await message.send({ displayName: name, contacts: [{ vcard }] }, { contextInfo: { externalAdReply: adon }, quoted: message }, "contacts");
 });

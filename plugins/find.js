@@ -43,10 +43,10 @@ function sign(signString, accessSecret) {
 System({
     pattern: 'find',
     fromMe: isPrivate,
-    desc: 'Find details of a song',
+    desc: 'Find details of a song 🎶',
     type: 'search',
 }, async (message, match, m) => {
-    if (!message.reply_message || (!message.reply_message.audio && !message.reply_message.video)) return await message.reply('*Reply to audio or video*');
+    if (!message.reply_message || (!message.reply_message.audio && !message.reply_message.video)) return await message.reply('*Reply to audio or video 🎶*');
     const p = await message.reply_message.downloadAndSave();
     const options = {
        host: 'identify-eu-west-1.acrcloud.com',
@@ -89,6 +89,6 @@ System({
     const { album, release_date, artists, title } = metadata.music[0];
     const yt = await yts(title);
 
-    const cap = `*_${yt.videos[0].title}_*\n\n\n*Album :* ${album.name || ''}\n*Artists :* ${artists !== undefined ? artists.map((v) => v.name).join(', ') : ''}\n*Release Date :* ${release_date}\n\n\`\`\`1.⬢\`\`\` *audio*\n\`\`\`2.⬢\`\`\` *video*\n\n_*Send a number as a reply to download*_`
+    const cap = `*_${yt.videos[0].title}_*\n\n\n*Album:* ${album.name || ''}\n*Artists:* ${artists !== undefined ? artists.map((v) => v.name).join(', ') : ''}\n*Release Date:* ${release_date}\n\n\`\`\`1.⬢\`\`\` *audio 🎧*\n\`\`\`2.⬢\`\`\` *video 🎥*\n\n_*Send a number as a reply to download 🎶*_`
     await message.send({ url: yt.videos[0].image }, { caption: cap }, "image");
 });

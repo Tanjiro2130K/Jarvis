@@ -1,14 +1,11 @@
 /*------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 Copyright (C) 2023 Loki - Xer.
-Licensed under the  GPL-3.0 License;
+Licensed under the GPL-3.0 License;
 you may not use this file except in compliance with the License.
 Jarvis - Loki-Xer 
 
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
 
 const { System, IronMan, isPrivate, getJson, getBuffer } = require("../lib/");
 
@@ -19,56 +16,58 @@ System({
     type: "anime" 
 }, async (message) => {
     const response = await getJson(await IronMan("ironman/waifu"));
-    if (!response.status) return await message.send("_*Failed to fetch image*_");
-    await message.send(response.ironman.url, { caption: "*here is your waifu*", quoted: message.data }, "image");
+    if (!response.status) return await message.send("Unable to summon the waifu image.");
+    await message.send(response.ironman.url, { caption: "Your waifu is here, enjoy!", quoted: message.data }, "image");
 });
 
 System({ 
     pattern: "neko", 
     fromMe: isPrivate, 
-    desc: "Send Neko images", 
+    desc: "Send neko images", 
     type: "anime" 
 }, async (message) => {
     const response = await getJson(await IronMan("ironman/neko"));
-    if (!response.status) return await message.send("Failed to fetch image");
-    await message.send(response.ironman.url, { caption: "*here is your neko*", quoted: message.data }, "image");
+    if (!response.status) return await message.send("The neko image couldn't be fetched.");
+    await message.send(response.ironman.url, { caption: "Here’s your cute neko!", quoted: message.data }, "image");
 });
 
 System({
-    pattern: 'sanime (.*)',
+    pattern: 'anime (.*)',
     fromMe: isPrivate,
     desc: 'Get details of an anime',
     type: 'anime',
-}, async (message, match, m) => {
-    if (!match) return await message.send("*Need an anime name*\n_Example: .anime Future Diary_");
-    var anime = encodeURI(match);
-    var res = await fetch(IronMan(`ironman/s/anime?anime=${anime}`));
-    if (!res.ok) return await message.send("*Not Found*\nCheck if the anime name is correct");
-    var data = await res.json();
-    var Etitle = data['English Title'];
-    var Romaji = data.Romaji;
-    var Japanese = data.Japanese;
-    var Summary = data.Summary;
-    var Released = data.Released;
-    var Ended = data.Ended;
-    var Popularity = data.Popularity;
-    var Rating = data.Rating;
-    var AgeRating = data['Age Rating'];
-    var Subtype = data.Subtype;
-    var Status = data.Status;
-    var Poster = data.Poster;
-    var Episodes = data.Episodes;
-    var EpisodeLength = data['Episode Length'];
-    var TotalLength = data['Total Length'];
-    var ShowType = data['Show Type'];
-    var NSFW = data.NSFW;
-    var Cover = data.Low_Cover;
-    var pimage = await getBuffer(Cover);
-    var YouTube = data.YouTube;
-    var link = "https://github.com/Loki-Xer/Jarvis-md";
-    var caption = `➥ *ɴᴀᴍᴇ:* ${Romaji}\n✰ *ᴛʏᴘᴇ:* ${ShowType}\n✰ *ꜱᴜʙᴛʏᴘᴇ:* ${Subtype}\n✰ *ꜱᴛᴀᴛᴜꜱ:* ${Status}\n✰ *ʀᴇʟᴇᴀꜱᴇᴅ:* ${Released}\n✰ *ᴇɴᴅᴇᴅ:* ${Ended}\n✰ *ᴇᴘɪꜱᴏᴅᴇꜱ:* ${Episodes}\n✰ *ᴛᴏᴛᴀʟ ʟᴇɴɢᴛʜ:* ${TotalLength}\n✰ *ᴇᴘɪꜱᴏᴅᴇ ʟᴇɴɢᴛʜ:* ${EpisodeLength}\n✰ *ᴀɢᴇ ʀᴀᴛɪɴɢ:* ${AgeRating}\n✰ *ᴘᴏᴘᴜʟᴀʀɪᴛʏ:* ${Popularity}\n✰ *ʀᴀᴛɪɴɢ:* ${Rating}\n✰ *ɴꜱꜰᴡ:* ${NSFW}\n✰ *ꜱᴜᴍᴍᴀʀʏ:* ${Summary}\n➥ *ᴛʀᴀɪʟᴇʀ:* https://youtube.com/watch?v=${YouTube}\n`;
-    var linkPrev = { title: Etitle, body: Japanese, thumbnail: pimage, mediaType: 1, mediaUrl: link, sourceUrl: link, showAdAttribution: false, renderLargerThumbnail: true };
-    await message.client.sendMessage(message.chat, { image: { url: Poster }, caption, contextInfo: { externalAdReply: linkPrev } }, { quoted: message });
+}, async (message, match) => {
+    if (!match) return await message.send("Please provide the name of an anime.\nExample: .anime Attack on Titan");
+    const anime = encodeURI(match);
+    const res = await fetch(IronMan(`ironman/s/anime?anime=${anime}`));
+    if (!res.ok) return await message.send("Anime not found. Double-check the name and try again.");
+    const data = await res.json();
+    const {
+        "English Title": Etitle,
+        Romaji,
+        Japanese,
+        Summary,
+        Released,
+        Ended,
+        Popularity,
+        Rating,
+        "Age Rating": AgeRating,
+        Subtype,
+        Status,
+        Poster,
+        Episodes,
+        "Episode Length": EpisodeLength,
+        "Total Length": TotalLength,
+        "Show Type": ShowType,
+        NSFW,
+        Low_Cover: Cover,
+        YouTube
+    } = data;
+    const pimage = await getBuffer(Cover);
+    const link = "https://github.com/yudataguy/Awesome-Japanese";
+    const caption = `➥ *Title:* ${Romaji}\n✰ *Type:* ${ShowType}\n✰ *Subtype:* ${Subtype}\n✰ *Status:* ${Status}\n✰ *Released:* ${Released}\n✰ *Ended:* ${Ended}\n✰ *Episodes:* ${Episodes}\n✰ *Total Duration:* ${TotalLength}\n✰ *Episode Duration:* ${EpisodeLength}\n✰ *Age Rating:* ${AgeRating}\n✰ *Popularity:* ${Popularity}\n✰ *Rating:* ${Rating}\n✰ *NSFW:* ${NSFW}\n✰ *Summary:* ${Summary}\n➥ *Trailer:* https://youtube.com/watch?v=${YouTube}`;
+    const linkPreview = { title: Etitle, body: Japanese, thumbnail: pimage, mediaType: 1, mediaUrl: link, sourceUrl: link, showAdAttribution: false, renderLargerThumbnail: true };
+    await message.client.sendMessage(message.chat, { image: { url: Poster }, caption, contextInfo: { externalAdReply: linkPreview } }, { quoted: message });
 });
 
 System({
@@ -76,10 +75,10 @@ System({
     fromMe: isPrivate,
     desc: 'Get a random anime quote',
     type: 'anime',
-}, async (message, match, m) => {
+}, async (message) => {
     const data = await getJson(IronMan('api/aquote'));
-    if (!data && !data.result && !data.result.length > 0) return await message.reply('_*No quotes found.*_');
+    if (!data || !data.result || data.result.length === 0) return await message.reply("No quotes found in the anime universe.");
     const randomIndex = Math.floor(Math.random() * data.result.length);
-    const { english: enquote, character, anime } = data.result[randomIndex];
-    await message.send(`*➭QUOTE:* ${enquote}\n*➭CHARACTER:* ${character}\n*➭ANIME:* ${anime}`);
+    const { english: quote, character, anime } = data.result[randomIndex];
+    await message.send(`➭ *Quote:* "${quote}"\n➭ *Character:* ${character}\n➭ *Anime:* ${anime}`);
 });

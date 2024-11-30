@@ -25,9 +25,9 @@ System({
 	adminAccess: true,
 }, async (message) => {
 	const start = new Date().getTime();
-	const ping = await message.send("*𝆺𝅥 running 𝆺𝅥*");
+	const ping = await message.send("i am alive ");
 	const end = new Date().getTime();
-	return await ping.edit("*☇ ꜱᴩᷨᴇͦᴇͭᴅ ☁ :* " + (end - start) + " *ᴍꜱ* ");
+	return await ping.edit("baka ");
 });
 
 System({
@@ -37,7 +37,7 @@ System({
     alias: ['view'],
     desc: "get view ones message"
 }, async (message) => {
-   if (!message.reply_message.viewones) return await message.reply("_*Reply to a view once*_");
+   if (!message.reply_message.viewones) return await message.reply("Reply to a view once");
    return await message.client.forwardMessage(message.chat, message.reply_message.message, { readViewOnce: true });
 });
 

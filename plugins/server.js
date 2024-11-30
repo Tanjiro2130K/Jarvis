@@ -23,7 +23,7 @@ System({
     alias: ['poweroff'],
     desc: "shutdown bot",
 }, async (message) => {
-    await message.reply(`_Jarvis is shutting down..._`);
+    await message.reply(`cya 👋🏻`);
     return await shell("npm stop");
 });
 
@@ -34,16 +34,16 @@ System({
   desc: "Set environment variable",
 }, async (message, match, m) => {
   const server = message.client.server;
-  if (!match) return await message.reply(`Example: .setvar SUDO:917025673121`);
+  if (!match) return await message.reply(`.setvar <sudo>,`);
   const [key, ...part] = match.split(":");
   const value = part.join(":").trim();
-  if (!key || !value) return await message.send(`_*Example: .setvar SUDO:917025673121*_`);
+  if (!key || !value) return await message.send(`_*Example: `);
   if (server === "HEROKU") {
     await m.send(`_*Updated variable ${key.toUpperCase()}: ${value}*`);
     const env = await setVar(key.toUpperCase(), value);
     if (!env) return m.reply(env);
   } else if (server === "RENDER") {
-      await message.send(`*_Successfully Set_* *${key.toUpperCase()}:${value}*\n_ReDeploying..._`);
+      await message.send(`*_Successfully Set_* *${key.toUpperCase()}:${value}*\n_ReDeploying 👾`);
       await setEnv(key.toUpperCase(), value);
   } else if (server === "KOYEB") {
     const koyebEnv = await changeEnv(key.toUpperCase(), value);

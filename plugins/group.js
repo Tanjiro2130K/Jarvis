@@ -33,8 +33,8 @@ System({
 }, async (message, match) => {
     match = message.reply_message?.sender || match;
     let isadmin = await isAdmin(message, message.user.jid);
-    if (!isadmin) return await message.reply("_I'm not admin_");
-    if (!match) return await message.reply("_Reply to user or need number_\n*Example:* .add 919876543210_");
+    if (!isadmin) return await message.reply("i'm not admin");
+    if (!match) return await message.reply("Reply to user or need number");
     match = match.replaceAll(' ', '');
     if (match) {
         let users = match.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
@@ -80,22 +80,22 @@ System({
 }, async (message, match) => {
     match = message.mention?.jid?.[0] || message.reply_message?.sender || match;
     if (!match) return await message.reply("_Reply to someone/mention_\n*Example:* .kick @user");    
-    if (!await isAdmin(message, message.user.jid)) return await message.send("_I'm not an admin_");
+    if (!await isAdmin(message, message.user.jid)) return await message.send("I'm not an admin");
     if (match === "all") {
         let { participants } = await message.client.groupMetadata(message.jid);
         participants = participants.filter(p => p.id !== message.user.jid);       
-        await message.reply("_To stop this process, use the restart command_");
+        await message.reply("To stop this process, use the restart command");
         for (let key of participants) {
             const jid = parsedJid(key.id);
             await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
 	    if(config.KICK_BLOCK) await message.client.updateBlockStatus(jid[0], "block");
-            await message.send(`_@${jid[0].split("@")[0]} kicked successfully_`, { mentions: jid });
+            await message.send(`_@${jid[0].split("@")[0]} get lost`, { mentions: jid });
         }
     } else {
         const jid = parsedJid(match);
         await message.client.groupParticipantsUpdate(message.jid, jid, "remove");
 	if(config.KICK_BLOCK) await message.client.updateBlockStatus(jid[0], "block");
-        await message.send(`_@${jid[0].split("@")[0]} kicked successfully_`, { mentions: jid, });
+        await message.send(`_@${jid[0].split("@")[0]} grt lost `, { mentions: jid, });
     }
 });
 
@@ -128,10 +128,10 @@ System({
 	match = message.mention.jid?.[0] || message.reply_message.sender || match
 	if (!match) return await message.reply("_Reply to someone/mention_\n*Example:* . demote @user");
 	let isadmin = await isAdmin(message, message.user.jid);
-	if (!isadmin) return await message.reply("_I'm not admin_");
+	if (!isadmin) return await message.reply("I'm not admin");
 	let jid = parsedJid(match);
 	await await message.client.groupParticipantsUpdate(message.jid, jid, "demote");
-	return await message.send(`_@${jid[0].split("@")[0]} demoted from admin successfully_`, { mentions: jid });
+	return await message.send(`_@${jid[0].split("@")[0]} demoted from admin successfully 🟥`, { mentions: jid });
 });
 
 
@@ -160,10 +160,10 @@ System({
 }, async (message) => {
 	let isadmin = await isAdmin(message, message.user.jid);
 	if (!isadmin) return await message.reply("_I'm not admin_");
-	const mute = await message.reply("_Muting Group_");
+	const mute = await message.reply("Muting Group");
 	await sleep(500);
 	await message.client.groupSettingUpdate(message.jid, "announcement");
-	return await mute.edit("_Group Muted successfully_");
+	return await mute.edit("Group Muted successfully");
 });
 
 System({
@@ -175,11 +175,11 @@ System({
 	desc: "unmute group"
 }, async (message) => {
 	let isadmin = await isAdmin(message, message.user.jid);
-	if (!isadmin) return await message.reply("_I'm not admin_");
-	const mute = await message.reply("_Unmuting Group_");
+	if (!isadmin) return await message.reply("I'm not admin");
+	const mute = await message.reply("unmuting Group");
 	await sleep(500);
 	await message.client.groupSettingUpdate(message.jid, "not_announcement");
-	return await mute.edit("_Group Unmuted successfully_");
+	return await mute.edit("Group Unmuted successfully");
 });
 
 System({
@@ -189,35 +189,44 @@ System({
     adminAccess: true,
     desc: "mention all users in the group"
 }, async (message, match) => {
-    if (!message.isGroup) return await message.reply(`@${message.sender.split("@")[0]}`, { mentions: [message.sender] });   
+    if (!message.isGroup) return await message.reply(`This command works only in groups.`);
+
     const { participants } = await message.client.groupMetadata(message.from).catch(e => {});
-    let admins = await participants.filter(v => v.admin !== null).map(v => v.id);
+    let admins = participants.filter(v => v.admin !== null).map(v => v.id);
+    let members = participants.filter(v => v.admin === null).map(v => v.id);
     let msg = "";
+
     if (match === "all" || match === "everyone") {
-        for (let i = 0; i < participants.length; i++) {
-            msg += `${i + 1}. @${participants[i].id.split('@')[0]}\n`;
+        // Tagging both admins and members separately
+        msg += `🌟 *Admins:* \n`;
+        for (let i = 0; i < admins.length; i++) {
+            msg += `${i + 1}. @${admins[i].split('@')[0]}\n`;
+        }
+        msg += `\n👤 *Members:* \n`;
+        for (let i = 0; i < members.length; i++) {
+            msg += `${i + 1}. @${members[i].split('@')[0]}\n`;
         }
         await message.send(msg, { mentions: participants.map(a => a.id) });
     } 
     else if (match === "admin" || match === "admins") {
+        // Tagging only admins
+        msg += `🌟 *Admins:* \n`;
         for (let i = 0; i < admins.length; i++) {
             msg += `${i + 1}. @${admins[i].split('@')[0]}\n`;
         }
-        return await message.send(msg, { mentions: participants.map(a => a.id) });
+        await message.send(msg, { mentions: admins });
     } 
-    else if (match === "me" || match === "mee") {
-        await message.send(`@${message.sender.split("@")[0]}`, { mentions: [message.sender] });
-    } 
-    else if (match || message.reply_message.text) {
-        match = match || message.reply_message.text;
-        if (!match) return await message.reply('*Example :* \n_*tag all*_\n_*tag admin*_\n_*tag text*_\n_*Reply to a message*_');
-        await message.send(match, { mentions: participants.map(a => a.id) });
-    } 
-    else if (message.reply_message.i) {
-        return await message.client.forwardMessage(message.jid, message.reply_message.message, { contextInfo: { mentionedJid: participants.map(a => a.id) } });
+    else if (match === "members") {
+        // Tagging only members
+        msg += `👤 *Members:* \n`;
+        for (let i = 0; i < members.length; i++) {
+            msg += `${i + 1}. @${members[i].split('@')[0]}\n`;
+        }
+        await message.send(msg, { mentions: members });
     } 
     else {
-        return await message.reply('*Example :* \n_*tag all*_\n*_tag admin*_\n*_tag text*_\n_*Reply to a message*_');
+        // Help message or invalid command
+        return await message.reply('*Example :* \n_*tag all*_\n_*tag admin*_\n_*tag members*_');
     }
 });
 

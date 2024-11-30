@@ -698,7 +698,7 @@ System({
 	if (!isadmin) return await message.reply("_I'm not admin_");
 	let jid = parsedJid(match);
 	await await message.client.groupParticipantsUpdate(message.jid, jid, "demote");
-	return await message.send(`_@${jid[0].split("@")[0]} demoted from admin successfully_`, { mentions: jid });
+	return await message.send(`_@${jid[0].split("@")[0]} demoted from admin successfully`, { mentions: jid });
 });
 
 

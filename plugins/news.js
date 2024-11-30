@@ -61,7 +61,7 @@ System({
         title: "*TOP TECH NEWS*"
       });
     } else {
-      await message.reply(`*No news found for* ${topic}`);
+      await message.reply(`No news found for ${topic}`);
     }
   } else {
     await message.reply(`*Available topics:* ${availableTopics.join(', ')}. *Please specify a valid topic, e.g., technews gadgets*`);

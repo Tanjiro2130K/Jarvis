@@ -77,7 +77,7 @@ System({
                     renderLargerThumbnail: true,
                     mediaType: 1,
                     mediaUrl: '',
-                    sourceUrl: "https://github.com/Loki-Xer/Jarvis-md",
+                    sourceUrl: "https://github.com/rutgerfarry/markhub_notes/blob/master/Japanese%20Culture%20Notes.md",
                     showAdAttribution: true
                 }
             }
